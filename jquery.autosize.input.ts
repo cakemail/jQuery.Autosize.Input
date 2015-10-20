@@ -12,10 +12,11 @@ module Plugins {
 
 	export interface IAutosizeInputOptions {
 		space: number;
+		isTinyMCE: boolean;
 	}
 
 	export class AutosizeInputOptions implements IAutosizeInputOptions {
-		constructor(public space: number = 30) { }
+		constructor(public space: number = 30, public isTinyMCE: boolean = false ) { }
 	}
 
 	export class AutosizeInput implements IAutosizeInput {
@@ -66,6 +67,9 @@ module Plugins {
 			var newWidth = this._mirror.width() + this._options.space;
 			// Update the width
 			this._input.width(newWidth);
+			if(this._options.isTinyMCE){
+				this._input.attr('data-mce-style', 'width:'+newWidth+'px');
+			}
 		}
 
 		public static getDefaultOptions(): IAutosizeInputOptions {
