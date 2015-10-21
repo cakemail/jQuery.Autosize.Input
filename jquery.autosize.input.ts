@@ -13,10 +13,11 @@ module Plugins {
 	export interface IAutosizeInputOptions {
 		space: number;
 		isTinyMCE: boolean;
+		returnInstance: boolean
 	}
 
 	export class AutosizeInputOptions implements IAutosizeInputOptions {
-		constructor(public space: number = 30, public isTinyMCE: boolean = false ) { }
+		constructor(public space: number = 30, public isTinyMCE: boolean = false, public returnInstance: boolean = false ) { }
 	}
 
 	export class AutosizeInput implements IAutosizeInput {
@@ -89,7 +90,10 @@ module Plugins {
 
 		// jQuery Plugin
 		$.fn.autosizeInput = function (options?: IAutosizeInputOptions) {
-			return this.each(function () {
+
+			var instance = null;
+
+			var collection = this.each(function () {
 				// Make sure it is only applied to input elements of valid type
 				// Or let it be the responsibility of the programmer to only select and apply to valid elements?
 				if (!(this.tagName == "INPUT" && $.inArray(this.type, validTypes) > -1)) {
@@ -108,9 +112,16 @@ module Plugins {
 					}
 
 					// Create and attach instance
-					$this.data(Plugins.AutosizeInput.getInstanceKey(), new Plugins.AutosizeInput(this, options));
+					instance = new Plugins.AutosizeInput(this, options);
+					$this.data(Plugins.AutosizeInput.getInstanceKey(), instance);
 				}
 			});
+
+			if(options.returnInstance === true){
+				return instance;
+			}else{
+				return collection;
+			}
 		};
 
 		// On Document Ready

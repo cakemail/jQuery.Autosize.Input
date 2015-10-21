@@ -2,11 +2,13 @@
 var Plugins;
 (function (Plugins) {
     var AutosizeInputOptions = (function () {
-        function AutosizeInputOptions(space, isTinyMCE) {
+        function AutosizeInputOptions(space, isTinyMCE, returnInstance) {
             if (space === void 0) { space = 30; }
             if (isTinyMCE === void 0) { isTinyMCE = false; }
+            if (returnInstance === void 0) { returnInstance = false; }
             this.space = space;
             this.isTinyMCE = isTinyMCE;
+            this.returnInstance = returnInstance;
         }
         return AutosizeInputOptions;
     })();
@@ -73,7 +75,8 @@ var Plugins;
         var validTypes = ["text", "password", "search", "url", "tel", "email", "number"];
         // jQuery Plugin
         $.fn.autosizeInput = function (options) {
-            return this.each(function () {
+            var instance = null;
+            var collection = this.each(function () {
                 // Make sure it is only applied to input elements of valid type
                 // Or let it be the responsibility of the programmer to only select and apply to valid elements?
                 if (!(this.tagName == "INPUT" && $.inArray(this.type, validTypes) > -1)) {
@@ -88,9 +91,16 @@ var Plugins;
                         options = $this.data(pluginDataAttributeName);
                     }
                     // Create and attach instance
-                    $this.data(Plugins.AutosizeInput.getInstanceKey(), new Plugins.AutosizeInput(this, options));
+                    instance = new Plugins.AutosizeInput(this, options);
+                    $this.data(Plugins.AutosizeInput.getInstanceKey(), instance);
                 }
             });
+            if (options.returnInstance === true) {
+                return instance;
+            }
+            else {
+                return collection;
+            }
         };
         // On Document Ready
         $(function () {
