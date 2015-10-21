@@ -117,7 +117,7 @@ module Plugins {
 				}
 			});
 
-			if(options.returnInstance === true){
+			if(options !== undefined && options.returnInstance === true){
 				return instance;
 			}else{
 				return collection;

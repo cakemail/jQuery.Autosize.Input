@@ -95,7 +95,7 @@ var Plugins;
                     $this.data(Plugins.AutosizeInput.getInstanceKey(), instance);
                 }
             });
-            if (options.returnInstance === true) {
+            if (options !== undefined && options.returnInstance === true) {
                 return instance;
             }
             else {
